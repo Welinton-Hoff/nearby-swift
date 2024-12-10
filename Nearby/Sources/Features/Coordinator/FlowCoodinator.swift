@@ -23,3 +23,10 @@ class FlowCoodinator {
     }
 }
 
+extension FlowCoodinator {
+    func decideNavigationFlow() {
+        let contentView = WelcomeView()
+        let welcomeViewController = WelcomeViewController(contentView: contentView)
+        navigationController?.pushViewController(welcomeViewController, animated: true)
+    }
+}
