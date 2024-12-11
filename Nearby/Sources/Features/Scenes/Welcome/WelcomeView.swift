@@ -21,6 +21,7 @@ class WelcomeView: UIView {
     private let welcomeLabel: UILabel = {
         let title = UILabel()
         
+        title.font = Typography.titleXL
         title.text = "Boas vindas ao Nearby!"
         title.translatesAutoresizingMaskIntoConstraints = false
         
@@ -30,16 +31,29 @@ class WelcomeView: UIView {
     private let descriptionLabel: UILabel = {
         let description = UILabel()
         
-        description.text = "Tenha cupons de vantegem para usar em seus estabelecimentos favoritos."
+        description.numberOfLines = 0
+        description.font = Typography.textMD
         description.translatesAutoresizingMaskIntoConstraints = false
+        description.text = "Tenha cupons de vantegem para usar em seus estabelecimentos favoritos."
         
         return description
+    }()
+    
+    private let subTextForTips: UILabel = {
+       let subText = UILabel()
+        
+        subText.font = Typography.textMD
+        subText.text = "Veja como funciona:"
+        subText.translatesAutoresizingMaskIntoConstraints = false
+        
+        return subText
+        
     }()
     
     private let tipsStackView: UIStackView = {
        let stackView = UIStackView()
         
-        stackView.spacing = 16
+        stackView.spacing = 24
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -52,6 +66,7 @@ class WelcomeView: UIView {
         button.layer.cornerRadius = 8
         button.setTitle("Começar", for: .normal)
         button.backgroundColor = Colors.greenBase
+        button.titleLabel?.font = Typography.action
         button.setTitleColor(Colors.gray100, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -73,7 +88,9 @@ class WelcomeView: UIView {
         addSubview(logoImageView)
         addSubview(welcomeLabel)
         addSubview(descriptionLabel)
+        addSubview(subTextForTips)
         addSubview(tipsStackView)
+        addSubview(startButton)
         
         setupConstraints()
     }
@@ -82,22 +99,27 @@ class WelcomeView: UIView {
         NSLayoutConstraint.activate([
             logoImageView.widthAnchor.constraint(equalToConstant: 48),
             logoImageView.heightAnchor.constraint(equalToConstant: 48),
-            logoImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            logoImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
             
-            welcomeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 8),
+            welcomeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 24),
             
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            descriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 4),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+            descriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 16),
             
-            tipsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            tipsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            tipsStackView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            subTextForTips.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            subTextForTips.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
             
-            startButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 8),
-            startButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            startButton.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 8),
+            tipsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            tipsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+            tipsStackView.topAnchor.constraint(equalTo: subTextForTips.bottomAnchor, constant: 24),
+            
+            startButton.heightAnchor.constraint(equalToConstant: 56),
+            startButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+            startButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            startButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
         ])
     }
     
