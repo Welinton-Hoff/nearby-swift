@@ -72,7 +72,20 @@ class PlaceTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        let selectedView = UIView()
+        selectedView.layer.cornerRadius = 8
+        selectedView.layer.masksToBounds = false
+        selectedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        
+        selectedBackgroundView = selectedView
+        
         setupUI()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        selectedBackgroundView?.frame = containerView.frame
     }
     
     required init?(coder: NSCoder) {

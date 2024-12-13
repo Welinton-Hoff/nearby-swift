@@ -15,12 +15,15 @@ class HomeViewModel {
     var userLongitude = -46.656451388116494
     
     var places: [Place] = []
+    var categories: [Category] = []
     var filteredPlaces: [Place] = []
     var didUpdatePlaces: (() -> Void)?
     var didUpdateCategories: (() -> Void)?
     
     public func fetchInitialData(completion: @escaping ([Category]) -> Void) {
         fetchCategories { categories in
+            completion(categories)
+            
             if let foodCategory = categories.first(where: {$0.name == "Alimentação"}) {
                 self.fetchPlaces(
                     for: foodCategory.id,
@@ -63,10 +66,6 @@ class HomeViewModel {
             }
             
             guard let data = data else { return }
-            
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("fetchPlaces Response: \(jsonString)")
-            }
             
             do {
                 self.places = try JSONDecoder().decode([Place].self, from: data)

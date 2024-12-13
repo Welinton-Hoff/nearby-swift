@@ -71,7 +71,10 @@ class HomeView: UIView {
     
     private let placesTableView: UITableView = {
         let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.contentInset = UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0)
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.indentifier)
         
         return tableView
@@ -110,18 +113,18 @@ class HomeView: UIView {
             mapView.trailingAnchor.constraint(equalTo: trailingAnchor),
             mapView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.65),
             
-            filterScrollView.heightAnchor.constraint(equalToConstant: 86),
             filterScrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            filterScrollView.topAnchor.constraint(equalTo: topAnchor, constant: 48),
+            filterScrollView.topAnchor.constraint(equalTo: topAnchor, constant: 72),
             filterScrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            filterScrollView.heightAnchor.constraint(equalTo: filterStackView.heightAnchor),
             
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
+            filterStackView.heightAnchor.constraint(equalToConstant: 40),
             filterStackView.topAnchor.constraint(equalTo: filterScrollView.topAnchor),
             filterStackView.bottomAnchor.constraint(equalTo: filterScrollView.bottomAnchor),
-            filterStackView.heightAnchor.constraint(equalTo: filterScrollView.heightAnchor),
             filterStackView.leadingAnchor.constraint(equalTo: filterScrollView.leadingAnchor),
             filterStackView.trailingAnchor.constraint(equalTo: filterScrollView.trailingAnchor),
         ])
@@ -154,11 +157,13 @@ class HomeView: UIView {
     
     func setupPanGesture() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        containerView.addGestureRecognizer(panGesture)
         
     }
     
     func updateFilterButtons(with categories: [Category], action: @escaping (Category) -> Void) {
         let categoryIcons: [String: String] = [
+            "Cinema": "film",
             "Compras": "cart",
             "Hospedagem": "bed.double",
             "Alimentação": "fork.knife",
@@ -174,6 +179,10 @@ class HomeView: UIView {
             
             button.tag = index
             button.addTarget(self, action: #selector(filterButtonTapped(_:)), for: .touchUpInside)
+            
+            if category.name == "Alimentação" {
+                updateButtonSelection(button: button)
+            }
             
             filterStackView.addArrangedSubview(button)
         }
@@ -207,9 +216,6 @@ class HomeView: UIView {
             button.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 8)
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
         }
-        
-        filterStackView.isLayoutMarginsRelativeArrangement = true
-        filterStackView.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 2, right: 0)
         
         return button
     }
@@ -247,13 +253,29 @@ class HomeView: UIView {
         let velocity = gesture.velocity(in: self)
         let translation = gesture.translation(in: self)
         
-//        switch gesture.state {
-//        case .changed:
-//            let newConstant = containerTopConstraint.constant + translation.y
-//            if newConstant <= 0 && newConstant >= frame.height * 0.5 {
-//                containerTopConstraint.constant = newConstant
-//                gesture.setTranslation(.zero, in: self)
-//            }
-//        }
+        switch gesture.state {
+        case .changed:
+            let newConstant = containerTopConstraint.constant + translation.y
+            if newConstant <= 0 && newConstant >= frame.height * 0.5 {
+                containerTopConstraint.constant = newConstant
+                gesture.setTranslation(.zero, in: self)
+            }
+        case .ended:
+            let finalPosition: CGFloat
+            let halfScreenHeight = -frame.height * 0.25
+            
+            if velocity.y > 0 {
+                finalPosition = -16
+            } else {
+                finalPosition = halfScreenHeight
+            }
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                self.containerTopConstraint.constant = finalPosition
+                self.layoutIfNeeded()
+            })
+            
+        default: break
+        }
     }
 }

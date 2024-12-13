@@ -27,6 +27,15 @@ extension FlowCoodinator: SplashFlowDelegate {
     func decideNavigationFlow() {
         let contentView = WelcomeView()
         let welcomeViewController = WelcomeViewController(contentView: contentView)
+        
+        welcomeViewController.flowDelegate = self
         navigationController?.pushViewController(welcomeViewController, animated: true)
+    }
+}
+
+extension FlowCoodinator: WelcomeFlowDelegate {
+    func goToHome() {
+        let homeViewController = HomeViewController()
+        navigationController?.pushViewController(homeViewController, animated: true)
     }
 }

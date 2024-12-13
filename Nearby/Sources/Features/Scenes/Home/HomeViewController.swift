@@ -67,26 +67,44 @@ class HomeViewController: UIViewController {
 
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        places.count
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return places.count
     }
-    
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.indentifier, for: indexPath)
                 as? PlaceTableViewCell else {
             return UITableViewCell()
         }
-        
-        cell.configure(with: places[indexPath.row])
+
+        cell.configure(with: places[indexPath.section])
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        let details = DetailsViewController()
+        details.place = places[indexPath.section]
+
+        navigationController?.pushViewController(details, animated: true)
     }
 }
 
