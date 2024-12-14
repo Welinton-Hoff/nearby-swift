@@ -262,7 +262,7 @@ class HomeView: UIView {
             }
         case .ended:
             let finalPosition: CGFloat
-            let halfScreenHeight = -frame.height * 0.25
+            let halfScreenHeight = -frame.height * 0.45
             
             if velocity.y > 0 {
                 finalPosition = -16

@@ -123,7 +123,7 @@ extension HomeViewController: MKMapViewDelegate {
             
             if let pinImage = UIImage(named: "mapIcon") {
                 annotationView?.image = pinImage
-                annotationView?.frame.size = CGSize(width: 28, height: 32)
+                annotationView?.frame.size = CGSize(width: 32, height: 32)
             }
         } else {
             annotationView?.annotation = annotation

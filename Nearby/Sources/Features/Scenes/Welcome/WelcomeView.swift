@@ -133,7 +133,7 @@ class WelcomeView: UIView {
     
     
     private func setupTips() {
-        guard let icon1 = UIImage(named: "mapIcon") else { return }
+        guard let icon1 = UIImage(named: "mapPin") else { return }
         let tip1 = TipsView(
             icon: icon1,
             title: "Encontre estabelecimentos",
